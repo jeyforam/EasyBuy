@@ -24,6 +24,14 @@ def get_db_cursor(commit=False):
     cursor.close()
     connection.close()
 
+def get_user_by_email(email):
+    with get_db_cursor() as cursor:
+        cursor.execute("SELECT * FROM Users WHERE email=%s",(email,))
+        user = cursor.fetchone()
+        
+        return True if user else False
+
+
 
 def register_user(username, email, password, role_id):
     with get_db_cursor(commit=True) as cursor:
