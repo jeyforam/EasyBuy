@@ -52,6 +52,3 @@ def login_user(email, password):
 
 if __name__ == "__main__":
     pass
-    # register_user("Jey", "jey@email.com", "password", 2)
-    # # products = login_user("admin@example.com", "password")
-    # # print(products)

@@ -1,6 +1,10 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import db.db_helper as db_helper
+import database.db_helper as db_helper
 
 app = FastAPI()
 
@@ -18,7 +22,7 @@ class LoginRequest(BaseModel):
 def check():
     return "EasyBuy server is up and running!"
 
-@app.post("/easybuy/register")
+@app.post("/register")
 def register(request: RegisterRequest):
 
     if db_helper.get_user_by_email(request.email):
@@ -34,7 +38,7 @@ def register(request: RegisterRequest):
 
     return {"message": "User registered successfully."}
 
-@app.post("/easybuy/login")
+@app.post("/login")
 def login(request:LoginRequest):
 
     is_logged_in = db_helper.login_user(
