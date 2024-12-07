@@ -1,4 +1,7 @@
-mysql-connector-python
+uvicorn
 fastapi
 pydantic
-uvicorn
+bcrypt
+mysql-connector-python
+python-dotenv
+PyJWT
