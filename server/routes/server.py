@@ -73,6 +73,25 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def check():
     return "EasyBuy server is up and running!"
 
+@app.post("/register")
+def register(request: RegisterRequest):
+    if db_helper.get_user_by_email(request.email):
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    hashed_password = hash_password(request.password)
+
+    db_helper.register_user(
+        username=request.username,
+        email=request.email,
+        password=hashed_password,  
+        role_id=2,
+        first_name=request.first_name,
+        last_name=request.last_name,
+        phone_number=request.phone_number
+    )
+
+    return {"message": "User created successfully."}
+
 @app.post("/login")
 def login(request: LoginRequest):
     user = db_helper.get_user_by_email(request.email)
@@ -95,22 +114,6 @@ def get_all_users(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=404, detail="No users found")
     return {"users": users}
 
-@app.post("/register")
-def register(request: RegisterRequest):
-    if db_helper.get_user_by_email(request.email):
-        raise HTTPException(status_code=400, detail="Email already registered")
-
-    # Hash the password before storing it in the database
-    hashed_password = hash_password(request.password)
-
-    db_helper.register_user(
-        username=request.username,
-        email=request.email,
-        password=hashed_password,  # Store the hashed password
-        role_id=2,
-        first_name=request.first_name,
-        last_name=request.last_name,
-        phone_number=request.phone_number
-    )
-
-    return {"message": "User created successfully."}
+@app.post("/logout")
+def logout(current_user: dict = Depends(get_current_user)):
+    return {"message": "Logged out successfully."}
